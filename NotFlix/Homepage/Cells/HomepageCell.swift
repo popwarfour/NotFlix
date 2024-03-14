@@ -11,7 +11,7 @@ import UIKit
 
 final class HomepageCell: UICollectionViewCell {
     
-    typealias ViewModel = MyCarouselViewController.ViewModel.MovieViewModel
+    typealias ViewModel = HomepageCarouselViewController.ViewModel.MovieViewModel
     private let homepageViewCellView = HomepageCellView(frame: .zero)
     
     override init(frame: CGRect) {
@@ -52,7 +52,7 @@ final class HomepageCellView: UIView, Pressable {
         static let stackSpacing: CGFloat = 8
     }
     
-    typealias ViewModel = MyCarouselViewController.ViewModel.MovieViewModel
+    typealias ViewModel = HomepageCarouselViewController.ViewModel.MovieViewModel
     
     override func layoutSubviews() {
         super.layoutSubviews()

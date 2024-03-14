@@ -14,25 +14,20 @@ import SwiftUI
 
 // MARK: - View Representable
 
-struct CarouselView: UIViewControllerRepresentable {
+struct HomepageCarouselView: UIViewControllerRepresentable {
     
-    let viewModel: MyCarouselViewController.ViewModel
+    let viewModel: HomepageCarouselViewController.ViewModel
     
-    func makeUIViewController(context: Context) -> MyCarouselViewController {
+    func makeUIViewController(context: Context) -> HomepageCarouselViewController {
         .init(viewModel: viewModel)
     }
     
-    func sizeThatFits(_ proposal: ProposedViewSize, uiViewController: MyCarouselViewController, context: Context) -> CGSize? {
-        
-        let size = CGSize(width: proposal.replacingUnspecifiedDimensions().width,
-                          height: uiViewController.preferredContentSize.height)
-        
-        print("SIZE THAT FITS - \(size)")
-        return size
-        
+    func sizeThatFits(_ proposal: ProposedViewSize, uiViewController: HomepageCarouselViewController, context: Context) -> CGSize? {
+        CGSize(width: proposal.replacingUnspecifiedDimensions().width,
+               height: uiViewController.preferredContentSize.height)
     }
     
-    func updateUIViewController(_ uiViewController: MyCarouselViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: HomepageCarouselViewController, context: Context) {
         // no-op
     }
     
@@ -40,7 +35,7 @@ struct CarouselView: UIViewControllerRepresentable {
 
 // MARK: - View Controller
 
-final class MyCarouselViewController: UICollectionViewController {
+final class HomepageCarouselViewController: UICollectionViewController {
     
     // MARK: - Properties
     

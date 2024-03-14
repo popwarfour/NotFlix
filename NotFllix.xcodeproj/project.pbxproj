@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9AECA8942BA277B10075B7C2 /* MyCarouselViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AECA8822BA277B10075B7C2 /* MyCarouselViewController.swift */; };
+		9AECA8942BA277B10075B7C2 /* HomepageCarouselViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AECA8822BA277B10075B7C2 /* HomepageCarouselViewController.swift */; };
 		9AECA8952BA277B10075B7C2 /* HomepageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AECA8842BA277B10075B7C2 /* HomepageCell.swift */; };
 		9AECA8962BA277B10075B7C2 /* HomepageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AECA8862BA277B10075B7C2 /* HomepageModels.swift */; };
 		9AECA8972BA277B10075B7C2 /* HomepageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AECA8882BA277B10075B7C2 /* HomepageView.swift */; };
@@ -21,7 +21,7 @@
 
 /* Begin PBXFileReference section */
 		9A2437A52B98AC2F00FC9C9D /* NotFllix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotFllix.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9AECA8822BA277B10075B7C2 /* MyCarouselViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCarouselViewController.swift; sourceTree = "<group>"; };
+		9AECA8822BA277B10075B7C2 /* HomepageCarouselViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomepageCarouselViewController.swift; sourceTree = "<group>"; };
 		9AECA8842BA277B10075B7C2 /* HomepageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomepageCell.swift; sourceTree = "<group>"; };
 		9AECA8862BA277B10075B7C2 /* HomepageModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomepageModels.swift; sourceTree = "<group>"; };
 		9AECA8882BA277B10075B7C2 /* HomepageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomepageView.swift; sourceTree = "<group>"; };
@@ -64,7 +64,7 @@
 		9AECA8832BA277B10075B7C2 /* Carousel */ = {
 			isa = PBXGroup;
 			children = (
-				9AECA8822BA277B10075B7C2 /* MyCarouselViewController.swift */,
+				9AECA8822BA277B10075B7C2 /* HomepageCarouselViewController.swift */,
 			);
 			path = Carousel;
 			sourceTree = "<group>";
@@ -85,7 +85,7 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		9AECA8892BA277B10075B7C2 /* HomepageCarousel */ = {
+		9AECA8892BA277B10075B7C2 /* Homepage */ = {
 			isa = PBXGroup;
 			children = (
 				9AECA8832BA277B10075B7C2 /* Carousel */,
@@ -93,7 +93,7 @@
 				9AECA8872BA277B10075B7C2 /* Models */,
 				9AECA8882BA277B10075B7C2 /* HomepageView.swift */,
 			);
-			path = HomepageCarousel;
+			path = Homepage;
 			sourceTree = "<group>";
 		};
 		9AECA88B2BA277B10075B7C2 /* Preview Content */ = {
@@ -116,7 +116,7 @@
 		9AECA8932BA277B10075B7C2 /* NotFlix */ = {
 			isa = PBXGroup;
 			children = (
-				9AECA8892BA277B10075B7C2 /* HomepageCarousel */,
+				9AECA8892BA277B10075B7C2 /* Homepage */,
 				9AECA88B2BA277B10075B7C2 /* Preview Content */,
 				9AECA88E2BA277B10075B7C2 /* Utility */,
 				9AECA88F2BA277B10075B7C2 /* Assets.xcassets */,
@@ -197,7 +197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9AECA8942BA277B10075B7C2 /* MyCarouselViewController.swift in Sources */,
+				9AECA8942BA277B10075B7C2 /* HomepageCarouselViewController.swift in Sources */,
 				9AECA8962BA277B10075B7C2 /* HomepageModels.swift in Sources */,
 				9AECA89C2BA277B10075B7C2 /* ContentView.swift in Sources */,
 				9AECA89A2BA277B10075B7C2 /* UICollectionViewCell+Utility.swift in Sources */,
