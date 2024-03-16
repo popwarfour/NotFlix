@@ -10,11 +10,11 @@ import SwiftUI
 struct HomepageView: View {
     
     private static let defaultContent: [HomepageCarouselViewController.ViewModel] = [
-        .init(id: 0,
-              title: "Top Choice",
-              columns: 1,
-              data: [HomepageCarouselViewController.ViewModel.MovieViewModel.random(count: 10)],
-              launchAnimation: .cardHighlight),
+//        .init(id: 0,
+//              title: "Top Choice",
+//              columns: 1,
+//              data: [HomepageCarouselViewController.ViewModel.MovieViewModel.random(count: 10)],
+//              launchAnimation: .cardHighlight),
         .init(id: 1,
               title: "You Might Also Like",
               columns: 4,

@@ -56,13 +56,6 @@ private struct CarouselContentView: View {
     
     @State private var slideIndex: Int = 0
     
-//    var flattenedMovies: [ViewModel.MovieViewModel] {
-//        viewModel
-//            .data
-//            .transpose()
-//            .flatMap { $0 }
-//    }
-    
     // MARK: Constructor
     
     init(viewModel: ViewModel) {
@@ -99,19 +92,9 @@ private struct CarouselContentView: View {
         
         LazyHGrid(rows: rows, spacing: 0) {
             ForEach(Array(movieColumns.enumerated()), id: \.offset) { index, column in
-                VStack(spacing: Constants.rowSpacing) {
-                    ForEach(column) { movie in
-                        SwiftUIHomepageCell(viewModel: movie)
-                            .frame(width: cellSize.width, height: cellSize.height)
-                            .if(index < movieColumns.count - 1, modifier: {
-                                let trailingPadding = Constants.columnSpacing(
-                                    forIndex: index,
-                                    performSlideAnimation: index >= slideIndex
-                                )
-                                $0.padding(.trailing, trailingPadding)
-                            })
-                    }
-                }
+                SwiftUIHomepageColumnCell(cellSize: cellSize,
+                                          column: column,
+                                          performSlideAnimation: index >= slideIndex)
             }
         }
         .padding(.top, Constants.margins.top)
@@ -152,37 +135,60 @@ private struct CarouselContentView: View {
     
 }
 
+struct SwiftUIHomepageColumnCell: View {
+    
+    typealias Constants = CarouselUtilities.Constants
+    
+    let cellSize: CGSize
+    fileprivate let column: CarouselContentView.MovieColumn
+    let performSlideAnimation: Bool
+    
+    @State private var opacity: Double = 0
+    
+    var body: some View {
+        VStack(spacing: Constants.rowSpacing) {
+            ForEach(column) { movie in
+                let trailingPadding = Constants.columnSpacing(
+                    forIndex: 1,
+                    performSlideAnimation: performSlideAnimation
+                )
+            
+                SwiftUIHomepageCell(viewModel: movie)
+                    .frame(width: cellSize.width, height: cellSize.height)
+                    .padding(.trailing, trailingPadding)
+            }
+        }
+        .opacity(opacity)
+        .observedVisibility { visible in
+            if visible {
+                withAnimation(.linear(duration: 0.2)) {
+                    opacity = 1
+                }
+            } else {
+                opacity = 0
+            }
+        }
+    }
+}
+
 struct SwiftUIHomepageCell: View {
     
     typealias ViewModel = SwiftUIHomepageCarouselView.ViewModel.MovieViewModel
     let viewModel: ViewModel
     
-    @State private var opacity: Double = 0
-    
     var body: some View {
         VStack {
             Image(uiImage: viewModel.movie.poster)
                 .resizable()
-//                .overlay(alignment: .top) {
-//                    if viewModel.showTitle {
-//                        Text(viewModel.movie.name)
-//                            .padding(.bottom, 32)
-//                            .background(Color.red)
-//                    }
-//                }
+                .overlay(alignment: .top) {
+                    if viewModel.showTitle {
+                        Text(viewModel.movie.name)
+                            .foregroundStyle(.white)
+                            .padding(.bottom, 32)
+                    }
+                }
         }
         .clipShape(RoundedRectangle(cornerRadius: 16))
-//        .opacity(opacity)
-//        .observedVisibility { visible in
-//            if visible {
-//                withAnimation(.linear(duration: 0.2)) {
-//                    opacity = 1
-//                }
-//            } else {
-//                opacity = 0
-//            }
-//        }
-        
     }
     
 }
