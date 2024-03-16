@@ -21,7 +21,8 @@ enum CarouselUtilities {
         static let columnSpacing: CGFloat = 16
         static func columnSpacing(forIndex index: Int, performSlideAnimation: Bool) -> CGFloat {
             guard performSlideAnimation else { return columnSpacing }
-            return CGFloat(index + 1) * columnSpacing * 20
+            let columnSpacing = CGFloat(index + 1) * columnSpacing * 20
+            return columnSpacing
         }
         
         static let margins = UIEdgeInsets(top: 0,
