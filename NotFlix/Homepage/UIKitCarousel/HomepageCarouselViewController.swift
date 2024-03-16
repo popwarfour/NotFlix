@@ -14,7 +14,7 @@ import SwiftUI
 
 // MARK: - View Representable
 
-struct HomepageCarouselView: UIViewControllerRepresentable {
+struct UIKitHomepageCarouselView: UIViewControllerRepresentable {
     
     let viewModel: HomepageCarouselViewController.ViewModel
     
@@ -39,68 +39,7 @@ final class HomepageCarouselViewController: UICollectionViewController {
     
     // MARK: - Properties
     
-    // MARK: View Model
-    
-    struct ViewModel: Identifiable {
-        let id: Int
-        
-        let title: String
-        
-        let columns: Int
-        let data: [[MovieViewModel]]
-        
-        let launchAnimation: LaunchAnimation?
-        
-        init(id: Int, 
-             title: String,
-             columns: Int,
-             data: [[MovieViewModel]],
-             launchAnimation: LaunchAnimation? = nil) {
-            self.id = id
-            self.title = title
-            self.columns = columns
-            self.data = data
-            self.launchAnimation = launchAnimation
-        }
-        
-        enum LaunchAnimation: Equatable {
-            /// The cards in the carousel will slide in the from the right
-            case slideIn(delay: CGFloat = 0)
-            /// The first card in the carousel with perform a fade in animation
-            case cardHighlight
-            
-            static func == (lhs: Self, rhs: Self) -> Bool {
-                switch (lhs, rhs) {
-                case (.slideIn, .slideIn): return true
-                case (.cardHighlight, .cardHighlight): return true
-                default: return false
-                }
-            }
-        }
-        
-        struct MovieViewModel {
-            let showTitle: Bool
-            let movie: Movie
-            
-            init(_ movie: Movie, showTitle: Bool = true) {
-                self.movie = movie
-                self.showTitle = showTitle
-            }
-            
-            static func random(count: Int, showTitle: Bool = true) -> [Self] {
-                let all = Movie.all
-                
-                return (0..<count)
-                    .map { _ in
-                        let index = Int.random(in: 0..<all.count)
-                        let movie = all[index]
-                        return .init(movie, showTitle: showTitle)
-                    }
-            }
-            
-        }
-        
-    }
+    typealias ViewModel = HomepageCarouselViewModel
     private let viewModel: ViewModel
     
     // MARK: Layout
@@ -137,20 +76,14 @@ final class HomepageCarouselViewController: UICollectionViewController {
     // MARK: - Setup
     
     override func viewDidLoad() {
-        print("VIEW DID LOAD - BEFORE")
         super.viewDidLoad()
-        
         collectionView.backgroundColor = .clear
-        
-        print("VIEW DID LOAD - AFTER")
         collectionView.register(cell: HomepageCell.self)
     }
     
     override func viewDidLayoutSubviews() {
-        print("VIEW DID LAYOUT SUBVIEWS - BEFORE")
         super.viewDidLayoutSubviews()
         
-        print("VIEW DID LAYOUT SUBVIEWS - AFTER")
         preferredContentSize = .init(width: view.bounds.width,
                                      height: layout.cache.contentSize.height)
     }
@@ -319,24 +252,7 @@ private final class CarouselLayout: UICollectionViewLayout {
         
     }
     
-    private enum Constants {
-        static func height(forWidth width: CGFloat) -> CGFloat { width * 1.5 }
-        
-        static let rowSpacing: CGFloat = 32
-        
-        static var peek: CGFloat { columnSpacing * 2}
-        
-        static let columnSpacing: CGFloat = 16
-        static func columnSpacing(for index: Int, performSlideAnimation: Bool) -> CGFloat {
-            guard performSlideAnimation else { return columnSpacing }
-            return CGFloat(index + 1) * columnSpacing * 20
-        }
-        
-        static let margins = UIEdgeInsets(top: 0,
-                                          left: 16,
-                                          bottom: 0,
-                                          right: 16)
-    }
+    typealias Constants = CarouselUtilities.Constants
     
     // MARK: Setup
     
@@ -354,7 +270,7 @@ private final class CarouselLayout: UICollectionViewLayout {
     
     /// Executes the slide animation if needed
     func performSlideAnimationIfNeeded() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1) {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0) {
             self.collectionView?.performBatchUpdates({
                 self.performSlideAnimation = false
                 self.collectionView?.reloadData()
@@ -401,52 +317,45 @@ private final class CarouselLayout: UICollectionViewLayout {
             assertionFailure()
             return
         }
+        // Update Cache
+        let rows = stride(from: 0, to: collectionView.numberOfSections, by: 1)
+            .map { collectionView.numberOfItems(inSection: $0) }
+        let cellFrames = CarouselUtilities.cellFrames(
+            forAvailableWidth: collectionView.bounds.width,
+            columns: columns,
+            rows: rows,
+            performSlideAnimation: performSlideAnimation
+        )
         
-        // Compute Column Width
-        let availableWidth = collectionView.bounds.width
-        let totalSpacing = (columns + 1) * Constants.columnSpacing
-        let cellWidth = (availableWidth - totalSpacing - Constants.peek) / columns
-        let cellHeight = Constants.height(forWidth: cellWidth)
-        
-        // Compute Attributes
-        var lastY: CGFloat = Constants.margins.top
-        var lastX: CGFloat = Constants.margins.left
-        
-        for section in 0..<collectionView.numberOfSections {
-            for row in 0..<collectionView.numberOfItems(inSection: section) {
-                let indexPath = IndexPath(row: row, section: section)
-                
-                let cellFrame = CGRect(
-                    x: lastX,
-                    y: lastY,
-                    width: cellWidth,
-                    height: cellHeight
-                )
-                let item = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-                item.frame = cellFrame
-                
-                cache.append(item)
-                
-                // Prepare next column
-                lastX += cellWidth
-                if row < collectionView.numberOfItems(inSection: section) - 1 {
-                    lastX += Constants.columnSpacing(for: row, performSlideAnimation: performSlideAnimation)
-                }
+        var largestX: CGFloat = 0
+        var largestY: CGFloat = 0
+        cellFrames
+            .enumerated()
+            .forEach { (sectionIndex, section) in
+                section
+                    .enumerated()
+                    .forEach { (rowIndex, cellFrame) in
+                        let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
+                        let item = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+                        item.frame = cellFrame
+                        cache.append(item)
+                        
+                        if cellFrame.maxX > largestX {
+                            largestX = cellFrame.maxX
+                        }
+                        if cellFrame.maxY > largestY {
+                            largestY = cellFrame.maxY
+                        }
+                    }
             }
-            
-            // Prepare next row
-            if section < collectionView.numberOfSections - 1 {
-                lastX = Constants.margins.left
-                lastY += Constants.rowSpacing + cellHeight
-            }
-        }
-        
      
         // Content Size
-        cache.contentSize = .init(width: lastX + Constants.margins.right,
-                                  height: ceil(lastY + cellHeight + Constants.margins.bottom))
-        
-        print("CACHE UPDATED - \(cache.contentSize)")
+        cache.contentSize = CarouselUtilities.contentSize(
+            forAvailableWidth: collectionView.bounds.width,
+            columns: columns,
+            rows: rows,
+            performSlideAnimation: performSlideAnimation
+        )
     }
     
 }
