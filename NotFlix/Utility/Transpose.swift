@@ -7,25 +7,9 @@
 
 import Foundation
 
-func performTranspose<T>(_ matrix: [[T]]) -> [[T]] {
-    guard !matrix.isEmpty else { return matrix }
-    
-    let columnCount = matrix[0].count
-    
-    var result = [[T]](repeating: [T](), count: columnCount)
-    
-    for row in matrix {
-        for (index, element) in row.enumerated() {
-            result[index].append(element)
-        }
-    }
-    
-    return result
-}
-
-
 extension Array where Element: MutableCollection & RangeReplaceableCollection {
     
+    /// Performs a matrix trasposition
     func transpose() -> Self {
         
         guard !self.isEmpty else { return self }

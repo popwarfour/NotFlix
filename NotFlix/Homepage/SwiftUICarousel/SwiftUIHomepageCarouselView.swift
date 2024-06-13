@@ -7,39 +7,29 @@
 
 import SwiftUI
 
+// MARK: - SwiftUIHomepageCarouselView
+
 struct SwiftUIHomepageCarouselView: View {
     
     typealias ViewModel = HomepageCarouselViewModel
     let viewModel: ViewModel
-    
-    @State private var geometryReaderResult = GeometryReaderResult.empty()
-//    @State private var performSlideAnimation = false
     
     var body: some View {
         ScrollView.observable(.horizontal, configuration: .init(includeContent: false)) {
             CarouselContentView(viewModel: viewModel)
         }
         .scrollIndicators(.hidden)
-//        .onAppear() {
-//            if case let .slideIn(delay) = viewModel.launchAnimation {
-//                performSlideAnimation = true
-//                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-//                    performSlideAnimation = viewModel.launchAnimation == .slideIn()
-//                    let animation = Animation
-////                        .interpolatingSpring(.init(response: 0.5, dampingRatio: 0.85),
-////                                             initialVelocity: 1)
-//                        .linear(duration: 5)
-//                    withAnimation(animation) {
-//                        performSlideAnimation = false
-//                    }
-//                }
-//            }
-//            
-//        }
+        .scrollClipDisabled()
+        .if(viewModel.launchAnimation == .cardHighlight) {
+            $0.zIndex(1)
+        }
     }
     
 }
 
+// MARK: - CarouselContentView
+
+/// The content within the scrollable area
 private struct CarouselContentView: View {
     
     // MARK: Properties
@@ -94,7 +84,8 @@ private struct CarouselContentView: View {
             ForEach(Array(movieColumns.enumerated()), id: \.offset) { index, column in
                 SwiftUIHomepageColumnCell(cellSize: cellSize,
                                           column: column,
-                                          performSlideAnimation: index >= slideIndex)
+                                          performSlideAnimation: index >= slideIndex,
+                                          performHighlight: index == 0 && viewModel.launchAnimation == .cardHighlight)
             }
         }
         .padding(.top, Constants.margins.top)
@@ -135,6 +126,8 @@ private struct CarouselContentView: View {
     
 }
 
+// MARK: - SwiftUIHomepageColumnCell
+
 struct SwiftUIHomepageColumnCell: View {
     
     typealias Constants = CarouselUtilities.Constants
@@ -142,24 +135,29 @@ struct SwiftUIHomepageColumnCell: View {
     let cellSize: CGSize
     fileprivate let column: CarouselContentView.MovieColumn
     let performSlideAnimation: Bool
+    let performHighlight: Bool
     
     @State private var opacity: Double = 0
     
     var body: some View {
         VStack(spacing: Constants.rowSpacing) {
-            ForEach(column) { movie in
+            ForEach(Array(column.enumerated()), id: \.offset) { (index, movie) in
                 let trailingPadding = Constants.columnSpacing(
                     forIndex: 1,
                     performSlideAnimation: performSlideAnimation
                 )
-            
-                SwiftUIHomepageCell(viewModel: movie)
+                SwiftUIHomepageCell(viewModel: movie,
+                                    performHighlight: index == 0 && performHighlight)
                     .frame(width: cellSize.width, height: cellSize.height)
                     .padding(.trailing, trailingPadding)
             }
         }
+        .if(performHighlight) {
+            $0.zIndex(1)
+        }
         .opacity(opacity)
         .observedVisibility { visible in
+            // Fade in effect (on scroll)
             if visible {
                 withAnimation(.linear(duration: 0.2)) {
                     opacity = 1
@@ -171,10 +169,16 @@ struct SwiftUIHomepageColumnCell: View {
     }
 }
 
+// MARK: - SwiftUIHomepageCell
+
 struct SwiftUIHomepageCell: View {
     
     typealias ViewModel = SwiftUIHomepageCarouselView.ViewModel.MovieViewModel
     let viewModel: ViewModel
+    let performHighlight: Bool
+    
+    @State private var isZoomed = false
+    @State private var didPerformZoom = false
     
     var body: some View {
         VStack {
@@ -189,6 +193,22 @@ struct SwiftUIHomepageCell: View {
                 }
         }
         .clipShape(RoundedRectangle(cornerRadius: 16))
+        .if(performHighlight, modifier: {
+            $0.zoom(show: $isZoomed)
+        })
+        .onAppear(perform: {
+            if performHighlight && !didPerformZoom {
+                isZoomed = true
+                didPerformZoom = true
+                // Not ideal but we have to force a layout cycle before we can start the animation
+                DispatchQueue.main.async {
+                    withAnimation(.linear(duration: 0.2)) {
+                        isZoomed = false
+                    }
+                }
+            }
+            
+        })
     }
     
 }

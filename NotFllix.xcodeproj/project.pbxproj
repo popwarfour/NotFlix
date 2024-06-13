@@ -25,6 +25,7 @@
 		9AFC66522BA5328700493BED /* ConditionalModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFC66512BA5328700493BED /* ConditionalModifiers.swift */; };
 		9AFC66562BA5D61100493BED /* DidAppearModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFC66552BA5D61100493BED /* DidAppearModifier.swift */; };
 		9AFC66582BA6014500493BED /* Transpose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFC66572BA6014500493BED /* Transpose.swift */; };
+		9AFC665A2BA68ADD00493BED /* ZoomViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFC66592BA68ADD00493BED /* ZoomViewModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		9AFC66512BA5328700493BED /* ConditionalModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionalModifiers.swift; sourceTree = "<group>"; };
 		9AFC66552BA5D61100493BED /* DidAppearModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DidAppearModifier.swift; sourceTree = "<group>"; };
 		9AFC66572BA6014500493BED /* Transpose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transpose.swift; sourceTree = "<group>"; };
+		9AFC66592BA68ADD00493BED /* ZoomViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomViewModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				9AECA8822BA277B10075B7C2 /* HomepageCarouselViewController.swift */,
+				9AECA8852BA277B10075B7C2 /* Cells */,
 			);
 			path = UIKitCarousel;
 			sourceTree = "<group>";
@@ -108,7 +111,6 @@
 				9AECA8A32BA3A34C0075B7C2 /* Shared */,
 				9AECA89E2BA3A0950075B7C2 /* SwiftUICarousel */,
 				9AECA8832BA277B10075B7C2 /* UIKitCarousel */,
-				9AECA8852BA277B10075B7C2 /* Cells */,
 				9AECA8872BA277B10075B7C2 /* Models */,
 				9AECA8882BA277B10075B7C2 /* HomepageView.swift */,
 			);
@@ -133,6 +135,7 @@
 				9AFC66512BA5328700493BED /* ConditionalModifiers.swift */,
 				9AFC66552BA5D61100493BED /* DidAppearModifier.swift */,
 				9AFC66572BA6014500493BED /* Transpose.swift */,
+				9AFC66592BA68ADD00493BED /* ZoomViewModifier.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -246,6 +249,7 @@
 				9AECA89A2BA277B10075B7C2 /* UICollectionViewCell+Utility.swift in Sources */,
 				9AECA8972BA277B10075B7C2 /* HomepageView.swift in Sources */,
 				9AECA8992BA277B10075B7C2 /* Pressable.swift in Sources */,
+				9AFC665A2BA68ADD00493BED /* ZoomViewModifier.swift in Sources */,
 				9AFC66582BA6014500493BED /* Transpose.swift in Sources */,
 				9AECA8952BA277B10075B7C2 /* HomepageCell.swift in Sources */,
 				9AECA8AA2BA52E3D0075B7C2 /* ObservableScrollView.swift in Sources */,

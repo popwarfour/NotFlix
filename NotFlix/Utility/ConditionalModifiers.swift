@@ -8,13 +8,25 @@
 import SwiftUI
 
 extension View {
-    
+
     @ViewBuilder
-    func `if`<T: View>(_ value: Bool, @ViewBuilder modifier: (Self) -> T) -> some View {
+    func `if`<T: View>(_ value: Bool,
+                       @ViewBuilder modifier: (Self) -> T) -> some View {
         if value {
             modifier(self)
         } else {
             self
+        }
+    }
+    
+    @ViewBuilder
+    func `if`<T: View, V: View>(_ value: Bool,
+                                @ViewBuilder modifier: (Self) -> T,
+                                @ViewBuilder elseModifier: (Self) -> V) -> some View {
+        if value {
+            modifier(self)
+        } else {
+            elseModifier(self)
         }
     }
     
@@ -24,6 +36,17 @@ extension View {
             modifier(self, value)
         } else {
             self
+        }
+    }
+    
+    @ViewBuilder
+    func `ifLet`<Value, T: View, V: View>(_ value: Value?,
+                                          @ViewBuilder modifier: (Self, Value) -> T,
+                                          @ViewBuilder elseModifier: (Self) -> V) -> some View {
+        if let value = value {
+            modifier(self, value)
+        } else {
+            elseModifier(self)
         }
     }
     

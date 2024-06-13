@@ -10,11 +10,11 @@ import SwiftUI
 struct HomepageView: View {
     
     private static let defaultContent: [HomepageCarouselViewController.ViewModel] = [
-//        .init(id: 0,
-//              title: "Top Choice",
-//              columns: 1,
-//              data: [HomepageCarouselViewController.ViewModel.MovieViewModel.random(count: 10)],
-//              launchAnimation: .cardHighlight),
+        .init(id: 0,
+              title: "Top Choice",
+              columns: 1,
+              data: [HomepageCarouselViewController.ViewModel.MovieViewModel.random(count: 10)],
+              launchAnimation: .cardHighlight),
         .init(id: 1,
               title: "You Might Also Like",
               columns: 4,
@@ -33,45 +33,54 @@ struct HomepageView: View {
         case uiKit
         case swiftUI
     }
-    static let mode = Mode.swiftUI
+    let mode: Mode
     
-    let coordinateSpace = CoordinateSpace.named("Mine")
+    @State private var showContent = true//false
     
     var body: some View {
-        ScrollView(.vertical) {
-            VStack(spacing: 0) {
-                ForEach(Self.defaultContent) { viewModel in
-                    switch Self.mode {
-                    case .uiKit:
-                        // Heading
-                        HStack {
-                            Text(viewModel.title)
-                                .font(.headline)
-                                .foregroundStyle(Color.white)
-                            Spacer(minLength: 0)
+        if showContent {
+            ScrollView(.vertical) {
+                VStack(spacing: 0) {
+                    ForEach(Self.defaultContent) { viewModel in
+                        switch mode {
+                        case .uiKit:
+                            // Heading
+                            HStack {
+                                Text(viewModel.title)
+                                    .font(.headline)
+                                    .foregroundStyle(Color.white)
+                                Spacer(minLength: 0)
+                            }
+                            .padding([.leading, .trailing, .top, .bottom], 16)
+                            // Carousel
+                            UIKitHomepageCarouselView(viewModel: viewModel)
+                        case .swiftUI:
+                            // Heading
+                            HStack {
+                                Text(viewModel.title)
+                                    .font(.headline)
+                                    .foregroundStyle(Color.white)
+                                Spacer(minLength: 0)
+                            }
+                            .padding([.leading, .trailing, .top, .bottom], 16)
+                            // Carousel
+                            SwiftUIHomepageCarouselView(viewModel: viewModel)
                         }
-                        .padding([.leading, .trailing, .top, .bottom], 16)
-                        // Carousel
-                        UIKitHomepageCarouselView(viewModel: viewModel)
-                            .border(.blue, width: 1)
-                    case .swiftUI:
-                        // Heading
-                        HStack {
-                            Text(viewModel.title)
-                                .font(.headline)
-                                .foregroundStyle(Color.white)
-                            Spacer(minLength: 0)
-                        }
-                        .padding([.leading, .trailing, .top, .bottom], 16)
-                        // Carousel
-                        SwiftUIHomepageCarouselView(viewModel: viewModel)
-                            .border(.red, width: 1)
+                        
                     }
-                    
                 }
             }
+            .background(Color.black)
+        } else {
+            Color
+                .black
+                .ignoresSafeArea()
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        showContent = true
+                    }
+                }
         }
-        .background(Color.black)
     }
     
 }

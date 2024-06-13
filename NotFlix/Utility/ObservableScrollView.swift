@@ -11,6 +11,7 @@ import SwiftUI
 
 extension ScrollView {
     
+    /// Creates an `ObservableScrollView`
     static func observable(_ axis: Axis.Set,
                            configuration: ObservableScrollViewConfiguration = .init(),
                            @ViewBuilder content: @escaping () -> Content) -> some View {
